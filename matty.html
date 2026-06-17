@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Matty — You're Not Alone</title>
+  <style>
+    /* ── RESET & BASE ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-deep:   #2d6a4f;
+      --green-mid:    #40916c;
+      --green-soft:   #74c69d;
+      --green-pale:   #b7e4c7;
+      --green-wash:   #d8f3dc;
+      --cream:        #faf7f2;
+      --warm-tan:     #e9ddd0;
+      --brown-light:  #c4a882;
+      --brown-mid:    #8b6f52;
+      --text-dark:    #2c2c2c;
+      --text-mid:     #555;
+      --text-light:   #888;
+      --white:        #ffffff;
+      --shadow:       0 4px 24px rgba(45,106,79,.12);
+      --radius:       18px;
+      --radius-sm:    10px;
+      --transition:   .3s cubic-bezier(.4,0,.2,1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      line-height: 1.7;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(250,247,242,.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--green-pale);
+      padding: 0 5%;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 72px;
+    }
+
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.6rem; font-weight: 800;
+      color: var(--green-deep); text-decoration: none;
+    }
+
+    .nav-logo svg { width: 38px; height: 38px; }
+
+    .nav-links {
+      display: flex; align-items: center; gap: 6px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      padding: 8px 14px; border-radius: var(--radius-sm);
+      text-decoration: none; color: var(--text-mid);
+      font-size: .72rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+      transition: var(--transition);
+    }
+
+    .nav-links a svg { width: 22px; height: 22px; }
+
+    .nav-links a:hover, .nav-links a.active {
+      background: var(--green-wash); color: var(--green-deep);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 92vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 80px 6% 60px;
+      position: relative; overflow: hidden;
+      background:
+        linear-gradient(to bottom, rgba(216,243,220,.72) 0%, rgba(250,247,242,.58) 40%, rgba(216,243,220,.72) 100%),
+        url('https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=1800&q=90') center 40%/cover no-repeat;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(255,255,255,.08) 0%, transparent 80%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      display: flex; flex-direction: column; align-items: center;
+      position: relative; z-index: 1;
+      width: 100%;
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--green-soft); color: var(--white);
+      padding: 6px 18px; border-radius: 999px;
+      font-size: .82rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 4.5vw, 3.2rem);
+      font-weight: 900; line-height: 1.15;
+      color: var(--green-deep);
+      max-width: 780px;
+      margin-bottom: 22px;
+      text-shadow: 0 2px 20px rgba(255,255,255,.9), 0 0 50px rgba(216,243,220,.7);
+    }
+
+    .hero h1 span { color: var(--green-mid); }
+
+    .hero p {
+      font-size: clamp(1rem, 2.2vw, 1.22rem);
+      color: var(--text-mid); max-width: 600px;
+      margin-bottom: 40px;
+    }
+
+    .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 30px; border-radius: 999px;
+      font-size: 1rem; font-weight: 700;
+      text-decoration: none; transition: var(--transition);
+      cursor: pointer; border: none;
+    }
+
+    .btn-primary {
+      background: var(--green-deep); color: var(--white);
+      box-shadow: 0 6px 20px rgba(45,106,79,.35);
+    }
+    .btn-primary:hover { background: var(--green-mid); transform: translateY(-2px); }
+
+    .btn-outline {
+      background: transparent; color: var(--green-deep);
+      border: 2px solid var(--green-mid);
+    }
+    .btn-outline:hover { background: var(--green-wash); transform: translateY(-2px); }
+
+    .hero-wave {
+      position: absolute; bottom: -2px; left: 0; right: 0;
+      line-height: 0;
+    }
+    .hero-wave svg { width: 100%; }
+
+    /* ── SECTIONS COMMON ── */
+    section { padding: 90px 6%; }
+
+    .section-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--green-mid); font-size: .8rem; font-weight: 800;
+      letter-spacing: .1em; text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .section-label::before, .section-label::after {
+      content: ''; flex: 1; height: 1.5px;
+      background: var(--green-pale);
+    }
+
+    h2 {
+      font-size: clamp(1.8rem, 4vw, 2.7rem);
+      font-weight: 900; color: var(--green-deep);
+      margin-bottom: 16px; line-height: 1.2;
+      display: inline-block;
+      cursor: default;
+    }
+
+    h2:hover {
+      animation: floatH2 1.6s ease-in-out infinite;
+    }
+
+    @keyframes floatH2 {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-6px); }
+    }
+
+    /* Idle floating animation on section label */
+    @keyframes floatLabel {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-4px); }
+    }
+
+    .section-label {
+      animation: floatLabel 3s ease-in-out infinite;
+    }
+
+    .lead {
+      font-size: 1.08rem; color: var(--text-mid);
+      max-width: 640px; margin-bottom: 54px;
+    }
+
+    /* ── ICON GRID (custom icons) ── */
+    .icon-showcase {
+      background: var(--white);
+      border-top: 1px solid var(--green-pale);
+      border-bottom: 1px solid var(--green-pale);
+    }
+
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .icon-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    @media (max-width: 560px) {
+      .icon-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .icon-card {
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+      padding: 28px 14px; border-radius: var(--radius);
+      background: var(--cream); border: 1.5px solid var(--green-pale);
+      text-align: center; transition: var(--transition); cursor: default;
+    }
+
+    .icon-card:hover {
+      background: var(--green-wash);
+      border-color: var(--green-soft);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+
+    .icon-card svg { width: 46px; height: 46px; }
+
+    .icon-card span {
+      font-size: .78rem; font-weight: 700; color: var(--text-mid);
+      letter-spacing: .03em; text-transform: uppercase;
+    }
+
+    .icon-card { cursor: pointer; }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 999;
+      background: rgba(0,0,0,.45); backdrop-filter: blur(4px);
+      align-items: center; justify-content: center; padding: 24px;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal-box {
+      background: var(--white); border-radius: var(--radius);
+      max-width: 480px; width: 100%;
+      padding: 40px 36px 32px;
+      box-shadow: 0 20px 60px rgba(45,106,79,.25);
+      position: relative;
+      animation: modalIn .25s ease;
+    }
+
+    @keyframes modalIn {
+      from { transform: scale(.92) translateY(12px); opacity: 0; }
+      to   { transform: scale(1) translateY(0); opacity: 1; }
+    }
+
+    .modal-close {
+      position: absolute; top: 16px; right: 16px;
+      background: var(--green-wash); border: none;
+      width: 34px; height: 34px; border-radius: 50%;
+      cursor: pointer; font-size: 1.1rem; color: var(--green-deep);
+      display: flex; align-items: center; justify-content: center;
+      transition: var(--transition);
+    }
+    .modal-close:hover { background: var(--green-pale); }
+
+    .modal-icon {
+      width: 64px; height: 64px; border-radius: 16px;
+      background: var(--green-wash);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px;
+    }
+    .modal-icon svg { width: 40px; height: 40px; }
+
+    .modal-title {
+      font-size: 1.4rem; font-weight: 900; color: var(--green-deep);
+      margin-bottom: 12px;
+    }
+
+    .modal-desc {
+      font-size: .96rem; color: var(--text-mid);
+      line-height: 1.7; margin-bottom: 20px;
+    }
+
+    .modal-tip {
+      background: var(--green-wash); border-left: 3px solid var(--green-mid);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 14px 16px; font-size: .88rem; color: var(--green-deep);
+      font-weight: 600;
+    }
+
+    .modal-tip::before {
+      content: '💡 Try this: ';
+      font-weight: 800;
+    }
+
+    /* ── UNDERSTAND GRID ── */
+    .understand-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 26px;
+    }
+
+    @media (max-width: 860px) {
+      .understand-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 520px) {
+      .understand-grid { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: var(--radius); padding: 34px 28px;
+      border: 1.5px solid var(--green-pale);
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      border-color: var(--green-soft);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(45,106,79,.16);
+    }
+
+    .card-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: var(--green-wash);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 18px;
+    }
+
+    .card-icon svg { width: 28px; height: 28px; }
+
+    .card h3 { font-size: 1.12rem; font-weight: 800; color: var(--green-deep); margin-bottom: 10px; }
+    .card p { font-size: .93rem; color: var(--text-mid); line-height: 1.65; }
+
+    /* ── DO/DON'T ── */
+    .do-dont {
+      background: linear-gradient(135deg, var(--green-wash) 0%, var(--cream) 100%);
+    }
+
+    .do-dont-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 30px;
+    }
+
+    @media (max-width: 680px) { .do-dont-grid { grid-template-columns: 1fr; } }
+
+    .do-box, .dont-box {
+      border-radius: var(--radius); padding: 32px 28px;
+      border: 2px solid transparent;
+    }
+
+    .do-box {
+      background: var(--white); border-color: var(--green-soft);
+    }
+
+    .dont-box {
+      background: var(--white); border-color: #e8a09c;
+    }
+
+    .box-label {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.1rem; font-weight: 900; margin-bottom: 20px;
+    }
+
+    .do-box .box-label { color: var(--green-deep); }
+    .dont-box .box-label { color: #c0443e; }
+
+    .box-label svg { width: 26px; height: 26px; }
+
+    .do-list, .dont-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+
+    .do-list li, .dont-list li {
+      display: flex; gap: 10px; font-size: .94rem; color: var(--text-mid);
+    }
+
+    .do-list li::before {
+      content: '✓'; color: var(--green-mid); font-weight: 900; flex-shrink: 0;
+    }
+
+    .dont-list li::before {
+      content: '✕'; color: #c0443e; font-weight: 900; flex-shrink: 0;
+    }
+
+    /* ── TREATMENTS ── */
+    .treatments { background: var(--white); }
+
+    .treatment-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 860px) {
+      .treatment-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 520px) {
+      .treatment-grid { grid-template-columns: 1fr; }
+    }
+
+    .treatment-card {
+      border-radius: var(--radius); padding: 30px 24px;
+      border: 1.5px solid var(--green-pale);
+      position: relative; overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .treatment-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 4px; background: var(--green-mid);
+    }
+
+    .treatment-card:hover {
+      border-color: var(--green-soft);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+
+    .treatment-num {
+      font-size: 2.2rem; font-weight: 900;
+      color: var(--green-pale); line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    .treatment-card h3 { font-size: 1.05rem; font-weight: 800; color: var(--green-deep); margin-bottom: 8px; }
+    .treatment-card p { font-size: .88rem; color: var(--text-mid); line-height: 1.6; }
+
+    .treatment-tag {
+      display: inline-block; margin-top: 14px;
+      background: var(--green-wash); color: var(--green-deep);
+      padding: 4px 12px; border-radius: 999px;
+      font-size: .74rem; font-weight: 700; letter-spacing: .04em;
+    }
+
+    /* ── SELF-CARE STEPS ── */
+    .selfcare { background: var(--cream); }
+
+    .steps-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      max-width: 100%;
+    }
+
+    @media (max-width: 680px) {
+      .steps-list { grid-template-columns: 1fr; }
+    }
+
+    .step {
+      display: flex; gap: 22px; align-items: flex-start;
+      background: var(--white); border-radius: var(--radius);
+      padding: 26px 28px; border: 1.5px solid var(--green-pale);
+      box-shadow: var(--shadow); transition: var(--transition);
+    }
+
+    .step:hover { border-color: var(--green-soft); transform: translateX(6px); }
+
+    .step-num {
+      flex-shrink: 0;
+      width: 46px; height: 46px; border-radius: 50%;
+      background: var(--green-deep); color: var(--white);
+      font-size: 1.1rem; font-weight: 900;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .step h3 { font-size: 1.04rem; font-weight: 800; color: var(--green-deep); margin-bottom: 6px; }
+    .step p { font-size: .9rem; color: var(--text-mid); }
+
+    /* ── CRISIS BANNER ── */
+    .crisis {
+      background: linear-gradient(135deg, var(--green-deep), var(--green-mid));
+      padding: 60px 6%; text-align: center; color: var(--white);
+    }
+
+    .crisis h2 { color: var(--white); margin-bottom: 12px; }
+    .crisis p { color: rgba(255,255,255,.85); max-width: 520px; margin: 0 auto 32px; }
+
+    .crisis-number {
+      display: inline-flex; align-items: center; gap: 12px;
+      background: rgba(255,255,255,.15); border: 2px solid rgba(255,255,255,.4);
+      padding: 14px 30px; border-radius: 999px;
+      font-size: 1.4rem; font-weight: 900; letter-spacing: .06em;
+      color: var(--white); margin-bottom: 20px;
+    }
+
+    .crisis-note { font-size: .82rem; color: rgba(255,255,255,.65); }
+
+    /* ── ABOUT ── */
+    .about { background: var(--white); }
+
+    .about-inner {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+      align-items: center;
+    }
+
+    @media (max-width: 760px) { .about-inner { grid-template-columns: 1fr; } }
+
+    .about-illustration {
+      background: var(--green-wash);
+      border-radius: var(--radius);
+      aspect-ratio: 1 / 1;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+
+    .about-illustration svg { width: 70%; }
+
+    .about-text h2 { margin-bottom: 18px; }
+    .about-text p { color: var(--text-mid); margin-bottom: 16px; font-size: .96rem; }
+
+    .values { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+
+    .value-chip {
+      display: flex; align-items: center; gap: 7px;
+      background: var(--green-wash); color: var(--green-deep);
+      padding: 7px 16px; border-radius: 999px;
+      font-size: .82rem; font-weight: 700;
+    }
+
+    .value-chip svg { width: 16px; height: 16px; }
+
+    /* ── CONTACT & SOCIALS ── */
+    .contact-socials {
+      background: linear-gradient(160deg, var(--cream) 0%, var(--green-wash) 100%);
+    }
+
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+      align-items: center;
+    }
+
+    @media (max-width: 700px) { .contact-grid { grid-template-columns: 1fr; } }
+
+    .contact-block h3, .socials-block h3 {
+      font-size: 1.15rem; font-weight: 800; color: var(--green-deep);
+      margin-bottom: 20px;
+    }
+
+    .contact-item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 18px; background: var(--white);
+      border-radius: var(--radius-sm); margin-bottom: 12px;
+      border: 1.5px solid var(--green-pale);
+      font-size: .9rem; color: var(--text-mid);
+      transition: var(--transition);
+    }
+
+    .contact-item:hover { border-color: var(--green-soft); background: var(--green-wash); }
+    .contact-item svg { width: 22px; height: 22px; flex-shrink: 0; color: var(--green-mid); }
+    .contact-item strong { display: block; font-size: .78rem; color: var(--text-light); font-weight: 600; margin-bottom: 2px; text-transform: uppercase; letter-spacing: .04em; }
+
+    .social-links { display: flex; flex-direction: column; gap: 12px; }
+
+    .social-link {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 18px; background: var(--white);
+      border-radius: var(--radius-sm); border: 1.5px solid var(--green-pale);
+      text-decoration: none; color: var(--text-mid); font-size: .9rem; font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .social-link:hover { border-color: var(--green-soft); transform: translateX(4px); }
+    .social-link svg { width: 22px; height: 22px; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--green-deep); color: rgba(255,255,255,.7);
+      text-align: center; padding: 36px 6%;
+      font-size: .85rem;
+    }
+
+    footer strong { color: var(--white); }
+
+    footer a { color: var(--green-soft); text-decoration: none; }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE NAV ── */
+    @media (max-width: 600px) {
+      .nav-links a span { display: none; }
+      .nav-links a { padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════ NAVBAR ══════════ -->
+<nav>
+  <a href="#hero" class="nav-logo">
+    <!-- Matty logo: leaf+heart -->
+    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="24" cy="30" rx="16" ry="13" fill="#74c69d" opacity=".35"/>
+      <path d="M24 42 C8 32 6 16 24 10 C42 16 40 32 24 42Z" fill="#40916c"/>
+      <path d="M24 10 L24 38" stroke="#d8f3dc" stroke-width="1.4" stroke-dasharray="2 3"/>
+      <path d="M17 21 C17 18 20 17 22 19 C20 17 27 16 27 21 C27 25 22 28 22 28 C22 28 17 25 17 21Z" fill="#ffffff" opacity=".9"/>
+    </svg>
+    Matty
+  </a>
+
+  <ul class="nav-links">
+    <li>
+      <a href="#about">
+        <!-- About: person silhouette -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+        </svg>
+        <span>About</span>
+      </a>
+    </li>
+    <li>
+      <a href="#contact">
+        <!-- Contact: envelope -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="4" width="20" height="16" rx="3"/>
+          <polyline points="2,4 12,13 22,4"/>
+        </svg>
+        <span>Contact</span>
+      </a>
+    </li>
+    <li>
+      <a href="#contact">
+        <!-- Socials: share nodes -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+        </svg>
+        <span>Socials</span>
+      </a>
+    </li>
+    <li>
+      <a href="#contact">
+        <!-- Address: map pin -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+          <circle cx="12" cy="9" r="2.5"/>
+        </svg>
+        <span>Address</span>
+      </a>
+    </li>
+    <li>
+      <a href="#selfcare">
+        <!-- Breathe: lungs/wave custom icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 4 C12 4 7 7 7 12 C7 15 9 17 12 17 C15 17 17 15 17 12 C17 7 12 4 12 4Z"/>
+          <path d="M12 17 L12 20"/>
+          <path d="M9 20 L15 20"/>
+        </svg>
+        <span>Breathe</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<!-- ══════════ HERO ══════════ -->
+<section class="hero" id="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l7.1-1.01L12 2z"/></svg>
+      Mental Wellness · Compassion · Hope
+    </div>
+    <h1>Your mental health matters. And so does <span>getting help.</span></h1>
+    <p>Matty is a safe place to understand mental health — for yourself, and for the people you love. We guide you with real information, kind words, and proven paths forward.</p>
+    <div class="hero-ctas">
+      <a href="#understand" class="btn btn-primary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Learn & Understand
+      </a>
+      <a href="#treatments" class="btn btn-outline">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Treatment Options
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-wave">
+    <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,40 C360,80 1080,0 1440,40 L1440,60 L0,60 Z" fill="#ffffff"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ══════════ UNIQUE ICON SHOWCASE ══════════ -->
+<section class="icon-showcase" style="padding: 60px 6%;">
+  <div style="text-align:center; margin-bottom: 36px;">
+    <div class="section-label">Our Icons</div>
+    <h2>Our Unique Symbols</h2>
+    <p class="lead" style="margin: 0 auto;">Every icon at Matty was drawn with purpose — no generic clip art. Each one tells part of the story.</p>
+  </div>
+
+  <div class="icon-grid">
+
+    <!-- 1. Inner Peace -->
+    <div class="icon-card"
+      data-title="Inner Peace"
+      data-desc="Inner peace isn't the absence of problems — it's the ability to stay calm in the middle of them. It's a skill you can build through daily practice, not a destination you arrive at."
+      data-tip="Spend 5 minutes in silence each morning before checking your phone. Just sit, breathe, and let your mind settle.">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="24" cy="24" r="18" stroke="#40916c" stroke-width="2" fill="#d8f3dc"/>
+        <circle cx="24" cy="24" r="10" stroke="#40916c" stroke-width="1.5" fill="#b7e4c7"/>
+        <circle cx="24" cy="24" r="4" fill="#2d6a4f"/>
+        <line x1="24" y1="6" x2="24" y2="11" stroke="#40916c" stroke-width="2" stroke-linecap="round"/>
+        <line x1="24" y1="37" x2="24" y2="42" stroke="#40916c" stroke-width="2" stroke-linecap="round"/>
+        <line x1="6" y1="24" x2="11" y2="24" stroke="#40916c" stroke-width="2" stroke-linecap="round"/>
+        <line x1="37" y1="24" x2="42" y2="24" stroke="#40916c" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span>Inner Peace</span>
+    </div>
+
+    <!-- 2. Breathe -->
+    <div class="icon-card"
+      data-title="Breathe"
+      data-desc="Your breath is the only automatic body function you can consciously control — and that makes it a direct line to your nervous system. Slow breathing signals safety to your brain and stops the anxiety spiral."
+      data-tip="Try box breathing: inhale 4 counts, hold 4, exhale 4, hold 4. Repeat 4 times whenever you feel overwhelmed.">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="16" cy="28" rx="9" ry="12" fill="#b7e4c7" stroke="#40916c" stroke-width="2"/>
+        <ellipse cx="32" cy="28" rx="9" ry="12" fill="#b7e4c7" stroke="#40916c" stroke-width="2"/>
+        <path d="M24 38 L24 44" stroke="#2d6a4f" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M19 44 L29 44" stroke="#2d6a4f" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M16 18 C16 12 24 10 24 10 C24 10 32 12 32 18" stroke="#40916c" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+      <span>Breathe</span>
+    </div>
+
+    <!-- 3. Healing Journey -->
+    <div class="icon-card"
+      data-title="Healing Journey"
+      data-desc="Healing is not linear. There will be setbacks, hard days, and moments where it feels like nothing is working. That's normal — progress still happened, even if you can't see it yet."
+      data-tip="Keep a simple weekly log: one thing that was harder than last week, and one thing that was easier. The 'easier' list grows over time.">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8 36 Q16 20 24 28 Q32 36 40 12" stroke="#40916c" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        <circle cx="8" cy="36" r="3" fill="#74c69d"/>
+        <circle cx="24" cy="28" r="3" fill="#40916c"/>
+        <circle cx="40" cy="12" r="4" fill="#2d6a4f"/>
+        <path d="M37 12 L40 9 L43 12" stroke="#2d6a4f" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+      <span>Journey</span>
+    </div>
+
+    <!-- 4. Gentle Hand -->
+    <div class="icon-card"
+      data-title="Support"
+      data-desc="Being there for someone with a mental health condition doesn't require the right words. Presence, consistency, and a willingness to just listen — without fixing — is often all they need."
+      data-tip="Instead of asking 'Are you okay?', try 'I've been thinking about you — how's your week been really?' It opens the door without pressure.">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 34 C14 34 10 30 10 24 C10 20 13 18 16 20 L16 14 C16 12 18 11 20 12 L20 11 C20 9 22 8 24 9 L24 10 C24 8 26 8 28 9 L28 20 C30 18 34 19 34 23 C34 28 32 32 28 36 L14 36 Z" fill="#b7e4c7" stroke="#40916c" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M20 18 L20 28 M24 17 L24 28 M28 20 L28 28" stroke="#40916c" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <span>Support</span>
+    </div>
+
+    <!-- 5. Safe Space -->
+    <div class="icon-card"
+      data-title="Safe Space"
+      data-desc="A safe space is any environment — physical or emotional — where you feel free to be yourself without fear of judgment, rejection, or harm. Creating one for yourself and others is an act of profound care."
+      data-tip="Identify one person in your life you can be fully honest with. If you don't have one yet, a therapist is a great first safe space to build from.">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M24 6 L38 14 L38 26 C38 34 24 42 24 42 C24 42 10 34 10 26 L10 14 Z" fill="#d8f3dc" stroke="#40916c" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M19 24 L22 27 L29 20" stroke="#2d6a4f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>Safe Space</span>
+    </div>
+
+    <!-- 6. Community -->
+    <div class="icon-card"
+      data-title="Community"
+      data-desc="Healing happens faster in connection. Being part of a community — whether a support group, a close friend group, or an online space — reduces isolation and reminds you that you're not alone in what you're feeling."
+      data-tip="Look up one local or online peer support group this week. Even lurking as a listener can help you feel less alone.">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="24" cy="16" r="5" fill="#74c69d" stroke="#40916c" stroke-width="1.8"/>
+        <circle cx="12" cy="26" r="4" fill="#b7e4c7" stroke="#40916c" stroke-width="1.8"/>
+        <circle cx="36" cy="26" r="4" fill="#b7e4c7" stroke="#40916c" stroke-width="1.8"/>
+        <path d="M16 38 C16 33 20 31 24 31 C28 31 32 33 32 38" stroke="#40916c" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+        <path d="M6 40 C6 37 8 35 12 35" stroke="#74c69d" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+        <path d="M42 40 C42 37 40 35 36 35" stroke="#74c69d" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+      </svg>
+      <span>Community</span>
+    </div>
+
+    <!-- 7. Journal / Reflect -->
+    <div class="icon-card"
+      data-title="Journal"
+      data-desc="Writing is thinking made visible. Journaling externalizes what's swirling inside, helps you spot emotional patterns, and creates distance between you and your thoughts. It's one of the most accessible mental health tools there is."
+      data-tip="Write for 5 minutes using this prompt: 'Right now I feel ___, and I think it's because ___. What I actually need is ___.'">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="8" width="26" height="32" rx="4" fill="#d8f3dc" stroke="#40916c" stroke-width="2"/>
+        <rect x="8" y="10" width="4" height="28" rx="2" fill="#74c69d"/>
+        <line x1="18" y1="18" x2="30" y2="18" stroke="#40916c" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="18" y1="24" x2="30" y2="24" stroke="#40916c" stroke-width="1.8" stroke-linecap="round"/>
+        <line x1="18" y1="30" x2="26" y2="30" stroke="#40916c" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      <span>Journal</span>
+    </div>
+
+    <!-- 8. Sunrise/Hope -->
+    <div class="icon-card"
+      data-title="Hope"
+      data-desc="Hope is not wishful thinking — it's the belief that things can get better combined with a willingness to take small steps toward that. Even in the darkest moments, hope is something that can be rebuilt, one small action at a time."
+      data-tip="Write down one thing — however small — that you're looking forward to in the next 7 days. Put it somewhere you'll see it every morning.">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8 32 Q24 14 40 32" stroke="#40916c" stroke-width="2.5" stroke-linecap="round" fill="#d8f3dc"/>
+        <line x1="24" y1="8" x2="24" y2="14" stroke="#c4a882" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="8" y1="16" x2="13" y2="19" stroke="#c4a882" stroke-width="2" stroke-linecap="round"/>
+        <line x1="40" y1="16" x2="35" y2="19" stroke="#c4a882" stroke-width="2" stroke-linecap="round"/>
+        <line x1="6" y1="34" x2="42" y2="34" stroke="#40916c" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      <span>Hope</span>
+    </div>
+
+    <!-- 9. Seed/Growth -->
+    <div class="icon-card"
+      data-title="Growth"
+      data-desc="Personal growth through hard times is called post-traumatic growth — and it's real. Struggle, when processed with the right support, can lead to deeper resilience, stronger relationships, and a clearer sense of purpose."
+      data-tip="Ask yourself monthly: 'What is one thing I handle better now than I did 6 months ago?' Growth is often invisible until you look back.">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M24 38 L24 22" stroke="#2d6a4f" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M24 26 C20 22 12 22 10 16 C16 14 22 18 24 22" fill="#74c69d" stroke="#40916c" stroke-width="1.5"/>
+        <path d="M24 30 C28 26 36 26 38 20 C32 18 26 22 24 26" fill="#b7e4c7" stroke="#40916c" stroke-width="1.5"/>
+        <ellipse cx="24" cy="40" rx="8" ry="3" fill="#c4a882" opacity=".5"/>
+      </svg>
+      <span>Growth</span>
+    </div>
+
+    <!-- 10. Rain/Release -->
+    <div class="icon-card"
+      data-title="Release"
+      data-desc="Holding everything in takes enormous energy. Releasing — through crying, talking, movement, or creative expression — is not weakness. It's your nervous system doing exactly what it needs to do to restore balance."
+      data-tip="Next time you feel the urge to cry or scream into a pillow — let it happen. Set a timer for 10 minutes and give yourself full permission to feel it without judgment.">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 22 C14 14 20 10 24 10 C28 10 36 14 34 22 C38 22 40 26 38 30 C36 34 32 34 30 34 L18 34 C14 34 10 32 10 28 C10 24 12 22 14 22Z" fill="#b7e4c7" stroke="#40916c" stroke-width="1.8"/>
+        <line x1="17" y1="38" x2="15" y2="44" stroke="#40916c" stroke-width="2" stroke-linecap="round"/>
+        <line x1="24" y1="38" x2="22" y2="44" stroke="#40916c" stroke-width="2" stroke-linecap="round"/>
+        <line x1="31" y1="38" x2="29" y2="44" stroke="#40916c" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span>Release</span>
+    </div>
+
+    <!-- 11. Compassion Flame -->
+    <div class="icon-card"
+      data-title="Compassion"
+      data-desc="Self-compassion is treating yourself with the same kindness you'd offer a close friend going through the same thing. Research shows it's one of the strongest predictors of emotional resilience — more than self-esteem alone."
+      data-tip="When you catch yourself being harshly self-critical, pause and ask: 'What would I say to a friend who just did this?' Then say that to yourself instead.">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M24 42 C24 42 10 34 10 22 C10 14 17 10 24 16 C24 10 32 8 36 16 C40 24 38 34 24 42Z" fill="#d8f3dc" stroke="#40916c" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M24 36 C24 36 16 30 16 23 C16 19 20 17 24 20 C24 17 28 16 30 20 C32 25 30 32 24 36Z" fill="#74c69d"/>
+      </svg>
+      <span>Compassion</span>
+    </div>
+
+    <!-- 12. Mind Map -->
+    <div class="icon-card"
+      data-title="Mind Map"
+      data-desc="Understanding how your thoughts connect helps you break the cycles that keep you stuck. Mental mapping — whether on paper or in your head — reveals patterns, triggers, and the links between how you think and how you feel."
+      data-tip="Draw a simple mind map of your biggest stressor right now. Branch out: causes, feelings it creates, behaviors it triggers, and one thing you can control. Seeing it visually reduces its power.">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="24" cy="24" r="6" fill="#40916c"/>
+        <circle cx="10" cy="14" r="4" fill="#b7e4c7" stroke="#40916c" stroke-width="1.5"/>
+        <circle cx="38" cy="14" r="4" fill="#b7e4c7" stroke="#40916c" stroke-width="1.5"/>
+        <circle cx="10" cy="34" r="4" fill="#b7e4c7" stroke="#40916c" stroke-width="1.5"/>
+        <circle cx="38" cy="34" r="4" fill="#b7e4c7" stroke="#40916c" stroke-width="1.5"/>
+        <line x1="14" y1="17" x2="20" y2="21" stroke="#40916c" stroke-width="1.5"/>
+        <line x1="34" y1="17" x2="28" y2="21" stroke="#40916c" stroke-width="1.5"/>
+        <line x1="14" y1="31" x2="20" y2="27" stroke="#40916c" stroke-width="1.5"/>
+        <line x1="34" y1="31" x2="28" y2="27" stroke="#40916c" stroke-width="1.5"/>
+      </svg>
+      <span>Mind Map</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════ UNDERSTAND ══════════ -->
+<section id="understand" style="background: var(--cream);">
+  <div class="section-label">Understanding</div>
+  <h2>What Is Mental Health?</h2>
+  <p class="lead">Mental health includes your emotional, psychological, and social well-being. It shapes how you think, feel, and act. It's not about being "crazy" — it's about being human.</p>
+
+  <div class="understand-grid reveal">
+    <div class="card">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#40916c" stroke-width="2" stroke-linecap="round"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      </div>
+      <h3>Depression</h3>
+      <p>More than sadness — depression is a persistent low mood, loss of interest, fatigue, and difficulty with daily life. It is treatable and common, affecting 1 in 5 people at some point.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#40916c" stroke-width="2" stroke-linecap="round"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+      </div>
+      <h3>Anxiety Disorders</h3>
+      <p>Anxiety is a normal stress response — but when it becomes overwhelming and persistent, it interferes with life. Panic attacks, social anxiety, and phobias are all forms of anxiety disorders.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#40916c" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+      </div>
+      <h3>Mood Disorders</h3>
+      <p>Conditions like bipolar disorder involve extreme shifts in mood, energy, and activity. These aren't character flaws — they're brain-based conditions with effective treatments available.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#40916c" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      </div>
+      <h3>PTSD & Trauma</h3>
+      <p>Trauma can rewire the nervous system. PTSD, C-PTSD, and acute stress responses are real medical conditions — not signs of weakness. Recovery is possible with the right care.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#40916c" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 9h.01M15 9h.01M9 15h.01M15 15h.01"/></svg>
+      </div>
+      <h3>OCD & Intrusive Thoughts</h3>
+      <p>OCD is not about being "neat." It's a cycle of unwanted intrusive thoughts and compulsive behaviors that feels impossible to control — but evidence-based therapies break that cycle.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#40916c" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <h3>Eating Disorders</h3>
+      <p>Anorexia, bulimia, and binge eating disorder are serious mental health conditions rooted in emotional distress. They are not vanity or choices — they require proper, compassionate treatment.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ DO / DON'T ══════════ -->
+<section class="do-dont" id="support">
+  <div class="section-label">Supporting Others</div>
+  <h2>How to Be There for Someone</h2>
+  <p class="lead">Supporting someone with a mental health condition can be hard. Here's what actually helps — and what can unintentionally make things worse.</p>
+
+  <div class="do-dont-grid reveal">
+    <div class="do-box">
+      <div class="box-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#2d6a4f" stroke-width="2.5" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        What TO Do
+      </div>
+      <ul class="do-list">
+        <li>Listen without judgment — just be present</li>
+        <li>Say "I'm here for you" instead of offering quick fixes</li>
+        <li>Ask "How can I support you right now?"</li>
+        <li>Learn about their specific condition</li>
+        <li>Check in consistently, even with a simple text</li>
+        <li>Encourage professional help without pressure</li>
+        <li>Respect their boundaries and pace</li>
+        <li>Take care of your own mental health too</li>
+      </ul>
+    </div>
+
+    <div class="dont-box">
+      <div class="box-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#c0443e" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+        What NOT to Do
+      </div>
+      <ul class="dont-list">
+        <li>Say "just cheer up" or "think positive"</li>
+        <li>Minimize their feelings ("it could be worse")</li>
+        <li>Push them to talk before they're ready</li>
+        <li>Make it about yourself or your experiences</li>
+        <li>Diagnose or label them without expertise</li>
+        <li>Ghost them because you don't know what to say</li>
+        <li>Promise to keep secrets around safety concerns</li>
+        <li>Assume they're "cured" after one good day</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ TREATMENTS ══════════ -->
+<section class="treatments" id="treatments">
+  <div class="section-label">Getting Help</div>
+  <h2>Treatment Recommendations</h2>
+  <p class="lead">There's no single path to healing — but effective, evidence-based options exist for every situation. You deserve support that fits you.</p>
+
+  <div class="treatment-grid reveal">
+
+    <div class="treatment-card">
+      <div class="treatment-num">01</div>
+      <h3>Cognitive Behavioral Therapy (CBT)</h3>
+      <p>The gold standard for depression, anxiety, OCD, and phobias. CBT helps you identify harmful thought patterns and replace them with healthier responses.</p>
+      <span class="treatment-tag">Talk Therapy</span>
+    </div>
+
+    <div class="treatment-card">
+      <div class="treatment-num">02</div>
+      <h3>Medication & Psychiatry</h3>
+      <p>Antidepressants, anti-anxiety medications, and mood stabilizers can help balance brain chemistry. Always consult a licensed psychiatrist — not a quick Google search.</p>
+      <span class="treatment-tag">Medical</span>
+    </div>
+
+    <div class="treatment-card">
+      <div class="treatment-num">03</div>
+      <h3>EMDR Therapy</h3>
+      <p>Eye Movement Desensitization and Reprocessing is highly effective for PTSD and trauma. It helps the brain process painful memories so they lose their emotional charge.</p>
+      <span class="treatment-tag">Trauma-Focused</span>
+    </div>
+
+    <div class="treatment-card">
+      <div class="treatment-num">04</div>
+      <h3>DBT (Dialectical Behavior Therapy)</h3>
+      <p>Built for emotional regulation. DBT teaches mindfulness, distress tolerance, and interpersonal skills — ideal for borderline personality disorder and intense emotions.</p>
+      <span class="treatment-tag">Skills-Based</span>
+    </div>
+
+    <div class="treatment-card">
+      <div class="treatment-num">05</div>
+      <h3>Group Therapy & Peer Support</h3>
+      <p>Healing in community. Sharing your story and hearing others can be deeply validating. Group therapy is led by a licensed therapist; peer groups are led by people with lived experience.</p>
+      <span class="treatment-tag">Community</span>
+    </div>
+
+    <div class="treatment-card">
+      <div class="treatment-num">06</div>
+      <h3>Mindfulness-Based Programs</h3>
+      <p>MBSR (Mindfulness-Based Stress Reduction) and MBCT reduce relapse in depression and anxiety. Regular meditation literally reshapes brain structures linked to emotional regulation.</p>
+      <span class="treatment-tag">Mind-Body</span>
+    </div>
+
+    <div class="treatment-card">
+      <div class="treatment-num">07</div>
+      <h3>Exercise Therapy</h3>
+      <p>Consistent physical activity is clinically proven to reduce depressive symptoms — comparable to antidepressants in some studies. 30 minutes, 3–5 days a week makes a measurable difference.</p>
+      <span class="treatment-tag">Lifestyle</span>
+    </div>
+
+    <div class="treatment-card">
+      <div class="treatment-num">08</div>
+      <h3>Nutritional Psychiatry</h3>
+      <p>The gut-brain connection is real. A diet rich in omega-3s, fermented foods, leafy greens, and whole grains supports neurotransmitter production and reduces inflammation tied to depression.</p>
+      <span class="treatment-tag">Lifestyle</span>
+    </div>
+
+    <div class="treatment-card">
+      <div class="treatment-num">09</div>
+      <h3>Digital Therapeutics & Apps</h3>
+      <p>Evidence-based apps like Woebot, Daylio, and Calm can supplement professional care — especially for mood tracking, CBT exercises, and guided meditation. Not a replacement, but a useful tool.</p>
+      <span class="treatment-tag">Tech-Assisted</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════ SELF-CARE STEPS ══════════ -->
+<section class="selfcare" id="selfcare">
+  <div class="section-label">Daily Practice</div>
+  <h2>What You Can Do Right Now</h2>
+  <p class="lead">Professional help is essential — but these daily practices build the foundation for lasting mental wellness. Start with one. Build from there.</p>
+
+  <div class="steps-list reveal">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div>
+        <h3>Name What You Feel</h3>
+        <p>Emotional labeling reduces the intensity of difficult feelings. Instead of "I feel bad," try: "I feel anxious because I'm worried about something I can't control." Specificity creates distance and clarity.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div>
+        <h3>Protect Your Sleep</h3>
+        <p>Sleep deprivation amplifies every mental health symptom. Aim for 7–9 hours. A consistent sleep and wake time — even on weekends — is more powerful than any supplement.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div>
+        <h3>Move Your Body Daily</h3>
+        <p>Even a 20-minute walk outdoors raises serotonin, reduces cortisol, and triggers BDNF — the brain's growth hormone. You don't need a gym. You just need to move.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">4</div>
+      <div>
+        <h3>Limit Doom-Scrolling</h3>
+        <p>Social media and news cycles are engineered to keep you anxious. Set a hard limit — 30 minutes per day, no phone in the bedroom. Your nervous system will thank you.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">5</div>
+      <div>
+        <h3>Connect — Even When You Don't Want To</h3>
+        <p>Isolation feeds depression and anxiety. Reach out to one person today — not to vent, just to connect. A short voice note, a meme, a "thinking of you" text. It counts.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">6</div>
+      <div>
+        <h3>Journal for 5 Minutes</h3>
+        <p>Writing externalizes internal chaos. You don't need to be eloquent — just honest. Try: "Right now I feel ___, and I think it's because ___." Five minutes, no editing, no judgment.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════ CRISIS BANNER ══════════ -->
+<section class="crisis">
+  <h2>If You're in Crisis Right Now</h2>
+  <p>You don't have to wait for things to get worse. Reaching out is the strongest thing you can do.</p>
+  <div class="crisis-number">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 .24h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.87v2.05z"/></svg>
+    988 — Suicide & Crisis Lifeline
+  </div>
+  <p class="crisis-note">Call or text 988 · Available 24/7 · Free & Confidential<br/>International Association for Suicide Prevention: <a href="https://www.iasp.info/resources/Crisis_Centres/" style="color: var(--green-soft);" target="_blank">find your local crisis line</a></p>
+</section>
+
+<!-- ══════════ ABOUT ══════════ -->
+<section class="about" id="about">
+  <div class="about-inner">
+    <div class="about-illustration">
+      <!-- Custom illustration: person + growing plant -->
+      <svg viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Person body -->
+        <circle cx="150" cy="90" r="40" fill="#74c69d"/>
+        <path d="M110 180 C110 140 190 140 190 180 L195 260 L105 260 Z" fill="#40916c"/>
+        <!-- Arms open -->
+        <path d="M110 190 C90 175 70 170 60 175" stroke="#40916c" stroke-width="8" stroke-linecap="round"/>
+        <path d="M190 190 C210 175 230 170 240 175" stroke="#40916c" stroke-width="8" stroke-linecap="round"/>
+        <!-- Plant growing from hand -->
+        <line x1="60" y1="175" x2="60" y2="130" stroke="#2d6a4f" stroke-width="3" stroke-linecap="round"/>
+        <path d="M60 148 C52 138 40 140 38 134 C46 130 56 136 60 142" fill="#b7e4c7"/>
+        <path d="M60 154 C68 144 80 146 82 140 C74 136 64 142 60 148" fill="#74c69d"/>
+        <!-- Stars of hope -->
+        <circle cx="240" cy="60" r="4" fill="#c4a882" opacity=".8"/>
+        <circle cx="50" cy="80" r="3" fill="#74c69d" opacity=".6"/>
+        <circle cx="260" cy="130" r="5" fill="#b7e4c7" opacity=".7"/>
+        <!-- Face -->
+        <circle cx="138" cy="86" r="5" fill="white"/>
+        <circle cx="162" cy="86" r="5" fill="white"/>
+        <path d="M138 103 Q150 113 162 103" stroke="white" stroke-width="3" stroke-linecap="round" fill="none"/>
+      </svg>
+    </div>
+
+    <div class="about-text">
+      <div class="section-label">About Matty</div>
+      <h2>Built on one belief: everyone deserves to feel okay.</h2>
+      <p>Matty was created for the moments when you don't know where to start — when everything feels heavy and the information online feels cold or clinical.</p>
+      <p>We're not a replacement for therapy or medication. We're the warm first step: plain-language education, compassionate guidance, and a clear path to the help that's right for you.</p>
+      <p>Named after every "Matty" — the friend who shows up, who asks how you're really doing, who stays on the call a little longer. That's who we want to be for you.</p>
+
+      <div class="values">
+        <div class="value-chip">
+          <svg viewBox="0 0 24 24" fill="#2d6a4f"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+          Evidence-based
+        </div>
+        <div class="value-chip">
+          <svg viewBox="0 0 24 24" fill="#2d6a4f"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+          Compassionate
+        </div>
+        <div class="value-chip">
+          <svg viewBox="0 0 24 24" fill="#2d6a4f"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Non-judgmental
+        </div>
+        <div class="value-chip">
+          <svg viewBox="0 0 24 24" fill="#2d6a4f"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Always available
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ CONTACT & SOCIALS ══════════ -->
+<section class="contact-socials" id="contact">
+  <div class="section-label">Connect</div>
+  <h2>We're Here Whenever You Need</h2>
+
+  <div class="contact-grid reveal">
+    <div class="contact-block">
+      <h3>Get in Touch</h3>
+
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="3"/><polyline points="2,4 12,13 22,4"/></svg>
+        <div>
+          <strong>Email</strong>
+          paulicsmercado@gmail.com
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 .24h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.87v2.05z"/></svg>
+        <div>
+          <strong>Phone</strong>
+          09293155418
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        <div>
+          <strong>Address</strong>
+          Caloocan City Metro Manila
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <div>
+          <strong>Hours</strong>
+          Mon – Fri, 8 AM – 8 PM · Sat 9 AM – 5 PM
+        </div>
+      </div>
+    </div>
+
+    <div class="socials-block">
+      <h3>Follow Our Community</h3>
+
+      <div class="social-links">
+        <a href="#" class="social-link">
+          <!-- Instagram -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="#40916c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+            <rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="#40916c"/>
+          </svg>
+          Instagram · @matty.care
+        </a>
+
+        <a href="#" class="social-link">
+          <!-- Facebook -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="#40916c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+            <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
+          </svg>
+          Facebook · Matty Mental Wellness
+        </a>
+
+        <a href="#" class="social-link">
+          <!-- TikTok custom -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="#40916c" stroke-width="2" stroke-linecap="round" width="22" height="22">
+            <path d="M9 12a4 4 0 104 4V4a5 5 0 005 5"/>
+          </svg>
+          TikTok · @mattycare
+        </a>
+
+        <a href="#" class="social-link">
+          <!-- LinkedIn -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="#40916c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+            <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/>
+            <rect x="2" y="9" width="4" height="12"/>
+            <circle cx="4" cy="4" r="2"/>
+          </svg>
+          LinkedIn · Matty Inc.
+        </a>
+
+        <a href="#" class="social-link">
+          <!-- YouTube -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="#40916c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+            <path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z"/>
+            <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/>
+          </svg>
+          YouTube · Matty Wellness Channel
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+  <p>
+    <strong>Matty Mental Wellness</strong> &mdash; A safe place to start. &nbsp;|&nbsp;
+    <a href="#about">About</a> &nbsp;·&nbsp;
+    <a href="#contact">Contact</a> &nbsp;·&nbsp;
+    <a href="#treatments">Treatments</a>
+  </p>
+  <p style="margin-top: 10px; font-size: .78rem; color: rgba(255,255,255,.45);">
+    Matty is for education and support only. It is not a substitute for professional mental health care.
+    If you are in crisis, call or text <strong style="color:white;">988</strong>.
+  </p>
+</footer>
+
+<!-- ══════════ MODAL ══════════ -->
+<div class="modal-overlay" id="iconModal">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div class="modal-icon" id="modalIcon"></div>
+    <div class="modal-title" id="modalTitle"></div>
+    <div class="modal-desc" id="modalDesc"></div>
+    <div class="modal-tip" id="modalTip"></div>
+  </div>
+</div>
+
+<!-- ══════════ SCROLL REVEAL JS ══════════ -->
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Icon card modal
+  const modal    = document.getElementById('iconModal');
+  const modalClose = document.getElementById('modalClose');
+
+  document.querySelectorAll('.icon-card').forEach(card => {
+    card.addEventListener('click', () => {
+      document.getElementById('modalTitle').textContent = card.dataset.title || '';
+      document.getElementById('modalDesc').textContent  = card.dataset.desc  || '';
+      document.getElementById('modalTip').textContent   = card.dataset.tip   || '';
+      // Clone the SVG into the modal icon area
+      const svgClone = card.querySelector('svg').cloneNode(true);
+      const iconEl = document.getElementById('modalIcon');
+      iconEl.innerHTML = '';
+      iconEl.appendChild(svgClone);
+      modal.classList.add('open');
+    });
+  });
+
+  modalClose.addEventListener('click', () => modal.classList.remove('open'));
+  modal.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('open'); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') modal.classList.remove('open'); });
+
+  // Active nav highlighting
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.classList.remove('active');
+      if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
